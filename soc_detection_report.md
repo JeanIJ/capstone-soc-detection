@@ -71,4 +71,4 @@ The hardest part was getting into the room and learning the tools. URLScan confu
 - RTeam walkthrough: https://rteam.kz/en/blog/post-20241226/
 - Medium walkthrough: https://medium.com/@rubyalhumidi/thm-soc-simulator-phishing-unfolding-4d1eb10a980a
 
-Tool verification on Talos, CyberChef and URLScan was performed by me. Screenshots are in the repo in the evidence folder.
+Tool verification on Talos, CyberChef and URLScan was performed by me. Screenshots are in the screenshots/ folder in this repo.
