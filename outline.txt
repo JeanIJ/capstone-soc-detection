@@ -1,0 +1,55 @@
+Detection outline for Capstone Part 2
+
+My 6 candidate detection points:
+A. Email from a lookalike domain (hatmakereurope.xyz instead of tryhatme.com) with a ZIP attachment
+B. ZIP attachment hiding a .pdf.lnk file (double extension trick)
+C. LNK file launching PowerShell with a download command (IEX ... DownloadString ... powercat)
+D. PowerView AD recon (Get-NetDomain and Get-NetGroup) plus net.exe and robocopy staging files
+E. PowerShell spawning nslookup.exe with long weird subdomains (DNS exfiltration)
+F. Threat feed match (IPs or hashes in logs matching ioc_dataset.json)
+
+I picked A, B, C, D and E. I skipped F. When I checked my indicators against ioc_dataset.json none of my hashes were in the feed. My list also had no IP addresses. So a feed match would not have caught anything in this attack. It felt wrong to build a detection point on evidence that did not match anything.
+
+
+A. Lookalike sender domain
+1. The suspicious behavior is an email arriving from hatmakereurope.xyz with a ZIP attachment and the domain looks almost exactly like the real company tryhatme.com.
+2. It matters because this email is how the whole attack started. The lookalike domain is what made Michael trust the invoice and open the attachment.
+3. An email gateway would catch this. It can compare sender domains against the company domain and flag near matches that come with attachments.
+
+B. ZIP hiding a .pdf.lnk file
+1. The suspicious behavior is a file named invoice.pdf.lnk inside the ZIP. It uses a double extension so it looks like a PDF document but it is really a Windows shortcut.
+2. It matters because this trick is what got the victim to run the attacker's command. A shortcut can launch programs but a real PDF cannot.
+3. An email gateway would catch this by scanning inside ZIP attachments for .lnk files. Endpoint logs would also show the shortcut being opened.
+
+C. LNK launching PowerShell with a download command
+1. The suspicious behavior is the shortcut starting PowerShell with a hidden command that downloads a script from the internet (IEX ... DownloadString ... powercat).
+2. It matters because this is the exact moment the attacker got the reverse shell. A reverse shell means remote control of Michael's computer.
+3. Endpoint logs would catch this. The best places to look are PowerShell command line logging and Sysmon process creation events (Event ID 1).
+
+D. PowerView recon and file staging
+1. The suspicious behavior is PowerShell running PowerView commands like Get-NetDomain and Get-NetGroup. Then net.exe mounted a network share and robocopy copied files into a staging folder.
+2. It matters because this is the attacker exploring the company network and gathering the financial files they were about to steal.
+3. Endpoint logs would catch this. PowerShell script block logging shows the PowerView commands. Process creation logs show net.exe and robocopy running.
+
+E. PowerShell spawning nslookup for DNS exfiltration
+1. The suspicious behavior is PowerShell starting nslookup.exe again and again with long random looking subdomains of haz4rdw4re.io.
+2. It matters because this is how the stolen data left the company. Each lookup carried a small encoded piece of the stolen ZIP file.
+3. DNS logs would catch this because of the strange long queries. Endpoint logs would also show the unusual pair of PowerShell spawning nslookup.
+
+
+My 3 rules:
+
+Rule name: Lookalike domain email with attachment
+IF: an incoming email comes from a domain that is only one or two characters different from tryhatme.com and it has a ZIP attachment
+THEN: alert with severity Medium
+Data source: email gateway
+
+Rule name: LNK file launching PowerShell download
+IF: a .lnk file starts powershell.exe and the command line contains DownloadString or IEX
+THEN: alert with severity High
+Data source: endpoint logs
+
+Rule name: PowerShell spawning nslookup with long subdomains
+IF: powershell.exe spawns nslookup.exe and the DNS queries contain unusually long or random looking subdomains
+THEN: alert with severity Critical
+Data source: DNS logs
